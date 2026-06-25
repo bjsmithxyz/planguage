@@ -1,4 +1,4 @@
-import { translateToPlanguage } from "./planguage.js";
+import { translateFromPlanguage, translateToPlanguage } from "./planguage.js";
 
 const cases = [
   ["for example", "pop epappe"],
@@ -13,6 +13,12 @@ const cases = [
   ["happy", "pappp"],
 ];
 
+const reverseCases = [
+  ["pop epappe", "for example"],
+  ["pepo", "hello"],
+  ["pi pepe!", "hi there!"],
+];
+
 let passed = 0;
 let failed = 0;
 
@@ -20,11 +26,24 @@ for (const [input, expected] of cases) {
   const actual = translateToPlanguage(input);
   if (actual === expected) {
     passed += 1;
-    console.log(`PASS: ${JSON.stringify(input)} -> ${JSON.stringify(actual)}`);
+    console.log(`PASS toPl: ${JSON.stringify(input)} -> ${JSON.stringify(actual)}`);
   } else {
     failed += 1;
     console.error(
-      `FAIL: ${JSON.stringify(input)} expected ${JSON.stringify(expected)} got ${JSON.stringify(actual)}`
+      `FAIL toPl: ${JSON.stringify(input)} expected ${JSON.stringify(expected)} got ${JSON.stringify(actual)}`
+    );
+  }
+}
+
+for (const [input, expected] of reverseCases) {
+  const actual = translateFromPlanguage(input);
+  if (actual === expected) {
+    passed += 1;
+    console.log(`PASS fromPl: ${JSON.stringify(input)} -> ${JSON.stringify(actual)}`);
+  } else {
+    failed += 1;
+    console.error(
+      `FAIL fromPl: ${JSON.stringify(input)} expected ${JSON.stringify(expected)} got ${JSON.stringify(actual)}`
     );
   }
 }

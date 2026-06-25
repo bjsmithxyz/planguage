@@ -1,7 +1,11 @@
-import { translateToPlanguage } from "./planguage.js";
+import { translateFromPlanguage, translateToPlanguage } from "./planguage.js";
 
 const inputEl = document.getElementById("inputText");
 const outputEl = document.getElementById("outputText");
+const inputLabelEl = document.getElementById("inputLabel");
+const outputLabelEl = document.getElementById("outputLabel");
+const directionBtn = document.getElementById("directionBtn");
+const directionLabelEl = document.getElementById("directionLabel");
 const charCountEl = document.getElementById("charCount");
 const copyBtn = document.getElementById("copyBtn");
 const toastEl = document.getElementById("toast");
@@ -15,6 +19,29 @@ const DEBOUNCE_MS = 80;
 const PARTY_CLICKS = 7;
 const PARTY_DURATION_MS = 5000;
 
+const DIRECTION = {
+  EN_TO_PL: "en-to-pl",
+  PL_TO_EN: "pl-to-en",
+};
+
+const UI = {
+  [DIRECTION.EN_TO_PL]: {
+    inputLabel: "English",
+    outputLabel: "Planguage",
+    inputPlaceholder: "Type something… for example",
+    switchLabel: "Planguage → English",
+    switchAria: "Switch to Planguage to English",
+  },
+  [DIRECTION.PL_TO_EN]: {
+    inputLabel: "Planguage",
+    outputLabel: "English",
+    inputPlaceholder: "Type something… pop epappe",
+    switchLabel: "English → Planguage",
+    switchAria: "Switch to English to Planguage",
+  },
+};
+
+let direction = DIRECTION.EN_TO_PL;
 let debounceTimer = null;
 let toastTimer = null;
 let mascotClicks = 0;
@@ -28,6 +55,12 @@ function debounce(fn) {
     window.clearTimeout(debounceTimer);
     debounceTimer = window.setTimeout(() => fn(...args), DEBOUNCE_MS);
   };
+}
+
+function translate(text) {
+  return direction === DIRECTION.EN_TO_PL
+    ? translateToPlanguage(text)
+    : translateFromPlanguage(text);
 }
 
 function showToast(message) {
@@ -47,6 +80,16 @@ function updateCharCount(value) {
   charCountEl.textContent = `${count} character${count === 1 ? "" : "s"}`;
 }
 
+function updateDirectionUI() {
+  const config = UI[direction];
+  inputLabelEl.textContent = config.inputLabel;
+  outputLabelEl.textContent = config.outputLabel;
+  inputEl.placeholder = config.inputPlaceholder;
+  directionLabelEl.textContent = config.switchLabel;
+  directionBtn.title = config.switchLabel;
+  directionBtn.setAttribute("aria-label", config.switchAria);
+}
+
 function renderOutput(text) {
   if (!text.trim()) {
     outputEl.textContent = EMPTY_HINT;
@@ -55,7 +98,7 @@ function renderOutput(text) {
     return;
   }
 
-  outputEl.textContent = translateToPlanguage(text);
+  outputEl.textContent = translate(text);
   outputEl.classList.remove("empty");
   outputEl.classList.remove("updated");
   void outputEl.offsetWidth;
@@ -66,12 +109,16 @@ function checkEasterEggs(rawInput) {
   const trimmed = rawInput.trim();
   const normalized = trimmed.toLowerCase();
 
-  if (normalized === "planguage" && !plangedShown) {
+  if (direction === DIRECTION.EN_TO_PL && normalized === "planguage" && !plangedShown) {
     plangedShown = true;
     showToast("Planged!");
   }
 
-  if (trimmed === "for example") {
+  const showExampleBadge =
+    (direction === DIRECTION.EN_TO_PL && trimmed === "for example") ||
+    (direction === DIRECTION.PL_TO_EN && trimmed === "pop epappe");
+
+  if (showExampleBadge) {
     exampleBadgeEl.classList.remove("hidden");
     mascotEl.classList.remove("wink");
     void mascotEl.offsetWidth;
@@ -111,6 +158,20 @@ function spawnConfetti() {
   }, PARTY_DURATION_MS);
 }
 
+function switchDirection() {
+  const currentInput = inputEl.value;
+  const currentOutput = outputEl.classList.contains("empty") ? "" : outputEl.textContent;
+
+  direction =
+    direction === DIRECTION.EN_TO_PL ? DIRECTION.PL_TO_EN : DIRECTION.EN_TO_PL;
+  updateDirectionUI();
+
+  inputEl.value = currentOutput === EMPTY_HINT ? "" : currentOutput;
+  updateCharCount(inputEl.value);
+  renderOutput(inputEl.value);
+  checkEasterEggs(inputEl.value);
+}
+
 const handleInput = debounce(() => {
   const value = inputEl.value;
   updateCharCount(value);
@@ -119,6 +180,7 @@ const handleInput = debounce(() => {
 });
 
 inputEl.addEventListener("input", handleInput);
+directionBtn.addEventListener("click", switchDirection);
 
 copyBtn.addEventListener("click", async () => {
   const text = outputEl.textContent;
@@ -143,5 +205,6 @@ mascotBtn.addEventListener("click", () => {
   }
 });
 
+updateDirectionUI();
 updateCharCount("");
 renderOutput("");

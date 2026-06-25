@@ -36,7 +36,7 @@
 
       <section class="translator-card" aria-label="Planguage translator">
         <div class="panel panel-input">
-          <label for="inputText">English</label>
+          <label for="inputText" id="inputLabel">English</label>
           <textarea
             id="inputText"
             rows="5"
@@ -46,9 +46,22 @@
           <p class="meta" id="charCount">0 characters</p>
         </div>
 
+        <div class="swap-wrap">
+          <button
+            class="btn-swap"
+            id="directionBtn"
+            type="button"
+            aria-label="Switch to Planguage to English"
+            title="Switch to Planguage → English"
+          >
+            <span class="swap-icon" aria-hidden="true">⇄</span>
+            <span class="swap-label" id="directionLabel">Planguage → English</span>
+          </button>
+        </div>
+
         <div class="panel panel-output">
           <div class="panel-header">
-            <label for="outputText">Planguage</label>
+            <label for="outputText" id="outputLabel">Planguage</label>
             <button class="btn-copy" id="copyBtn" type="button" aria-label="Copy translation">
               Copy
             </button>
