@@ -201,7 +201,7 @@ mascotBtn.addEventListener("click", () => {
   if (mascotClicks >= PARTY_CLICKS) {
     mascotClicks = 0;
     spawnConfetti();
-    showToast("Party mode!");
+    showToast(translateToPlanguage("Party mode!"));
   }
 });
 
