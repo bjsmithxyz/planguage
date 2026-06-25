@@ -1,4 +1,4 @@
-import { translateFromPlanguage, translateToPlanguage } from "./planguage.js";
+import { ensureReverseDictionary, translateFromPlanguage, translateToPlanguage } from "./planguage.js";
 
 const inputEl = document.getElementById("inputText");
 const outputEl = document.getElementById("outputText");
@@ -13,6 +13,9 @@ const mascotBtn = document.getElementById("mascotBtn");
 const mascotEl = document.getElementById("mascot");
 const exampleBadgeEl = document.getElementById("exampleBadge");
 const confettiLayerEl = document.getElementById("confettiLayer");
+const translatorCardEl = document.querySelector(".translator-card");
+const inputPanelEl = document.querySelector(".panel-input");
+const outputPanelEl = document.querySelector(".panel-output");
 
 const EMPTY_HINT = "Your translation pops up here…";
 const DEBOUNCE_MS = 80;
@@ -90,6 +93,15 @@ function updateDirectionUI() {
   directionBtn.setAttribute("aria-label", config.switchAria);
 }
 
+function swapPanels() {
+  const swapped = translatorCardEl.classList.toggle("is-swapped");
+  if (swapped) {
+    translatorCardEl.insertBefore(outputPanelEl, inputPanelEl);
+  } else {
+    translatorCardEl.insertBefore(inputPanelEl, outputPanelEl);
+  }
+}
+
 function renderOutput(text) {
   if (!text.trim()) {
     outputEl.textContent = EMPTY_HINT;
@@ -158,15 +170,43 @@ function spawnConfetti() {
   }, PARTY_DURATION_MS);
 }
 
-function switchDirection() {
+async function switchDirection() {
+  window.clearTimeout(debounceTimer);
+
+  const previousDirection = direction;
   const currentInput = inputEl.value;
   const currentOutput = outputEl.classList.contains("empty") ? "" : outputEl.textContent;
 
   direction =
     direction === DIRECTION.EN_TO_PL ? DIRECTION.PL_TO_EN : DIRECTION.EN_TO_PL;
+
+  if (direction === DIRECTION.PL_TO_EN) {
+    directionBtn.disabled = true;
+    try {
+      await ensureReverseDictionary();
+    } catch {
+      direction = previousDirection;
+      showToast("Reverse dictionary failed to load");
+      directionBtn.disabled = false;
+      return;
+    }
+    directionBtn.disabled = false;
+  }
+
+  swapPanels();
   updateDirectionUI();
 
-  inputEl.value = currentOutput === EMPTY_HINT ? "" : currentOutput;
+  if (currentOutput) {
+    inputEl.value = currentOutput;
+  } else if (currentInput) {
+    inputEl.value =
+      previousDirection === DIRECTION.EN_TO_PL
+        ? translateToPlanguage(currentInput)
+        : translateFromPlanguage(currentInput);
+  } else {
+    inputEl.value = "";
+  }
+
   updateCharCount(inputEl.value);
   renderOutput(inputEl.value);
   checkEasterEggs(inputEl.value);
@@ -180,7 +220,9 @@ const handleInput = debounce(() => {
 });
 
 inputEl.addEventListener("input", handleInput);
-directionBtn.addEventListener("click", switchDirection);
+directionBtn.addEventListener("click", () => {
+  void switchDirection();
+});
 
 copyBtn.addEventListener("click", async () => {
   const text = outputEl.textContent;

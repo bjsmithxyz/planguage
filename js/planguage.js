@@ -1,5 +1,3 @@
-import WORDS from "./words.js";
-
 const VOWELS = new Set(["a", "e", "i", "o", "u"]);
 
 function isLetter(char) {
@@ -104,25 +102,52 @@ function splitSegments(text) {
   return text.match(/[a-zA-Z]+|[^a-zA-Z]+/g) ?? [];
 }
 
-/** @type {Map<string, string>} */
-const reverseWordMap = new Map();
+/** @type {Map<string, string> | null} */
+let reverseWordMap = null;
 
-/** @type {Map<string, string>} */
-const reversePhraseMap = new Map();
+/** @type {Map<string, string> | null} */
+let reversePhraseMap = null;
 
-for (const word of WORDS) {
-  const plWord = translateToPlanguage(word);
+/** @type {Promise<void> | null} */
+let reverseDictionaryPromise = null;
 
-  if (word.includes(" ")) {
-    if (!reversePhraseMap.has(plWord)) {
-      reversePhraseMap.set(plWord, word);
+function buildReverseDictionary(words) {
+  reverseWordMap = new Map();
+  reversePhraseMap = new Map();
+
+  for (const word of words) {
+    const plWord = translateToPlanguage(word);
+
+    if (word.includes(" ")) {
+      if (!reversePhraseMap.has(plWord)) {
+        reversePhraseMap.set(plWord, word);
+      }
+      continue;
     }
-    continue;
+
+    if (!reverseWordMap.has(plWord)) {
+      reverseWordMap.set(plWord, word);
+    }
+  }
+}
+
+export function ensureReverseDictionary() {
+  if (reverseWordMap) {
+    return Promise.resolve();
   }
 
-  if (!reverseWordMap.has(plWord)) {
-    reverseWordMap.set(plWord, word);
+  if (!reverseDictionaryPromise) {
+    reverseDictionaryPromise = import("./words.js")
+      .then(({ default: words }) => {
+        buildReverseDictionary(words);
+      })
+      .catch((error) => {
+        reverseDictionaryPromise = null;
+        throw error;
+      });
   }
+
+  return reverseDictionaryPromise;
 }
 
 /**
@@ -133,6 +158,10 @@ for (const word of WORDS) {
 export function translateFromPlanguage(text) {
   if (!text) {
     return "";
+  }
+
+  if (!reverseWordMap || !reversePhraseMap) {
+    return text;
   }
 
   const trimmed = text.trim();

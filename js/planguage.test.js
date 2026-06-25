@@ -1,4 +1,4 @@
-import { translateFromPlanguage, translateToPlanguage } from "./planguage.js";
+import { ensureReverseDictionary, translateFromPlanguage, translateToPlanguage } from "./planguage.js";
 
 const cases = [
   ["for example", "pop epappe"],
@@ -18,6 +18,8 @@ const reverseCases = [
   ["pepo", "hello"],
   ["pi pepe!", "hi there!"],
 ];
+
+await ensureReverseDictionary();
 
 let passed = 0;
 let failed = 0;

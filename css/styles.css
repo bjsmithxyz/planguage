@@ -135,6 +135,16 @@ body {
   align-items: start;
 }
 
+.panel-input,
+.panel-output {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.translator-card.is-swapping .panel-input,
+.translator-card.is-swapping .panel-output {
+  pointer-events: none;
+}
+
 .panel {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -231,6 +241,11 @@ textarea:focus {
 
 .btn-copy:active {
   transform: scale(0.96);
+}
+
+.btn-copy:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .example-badge {
