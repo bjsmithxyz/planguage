@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Planguage — translate English into Planguage, where every consonant becomes P."
+    />
+    <title>Planguage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Fredoka:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orbs" aria-hidden="true">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+    </div>
+
+    <main class="app">
+      <header class="hero">
+        <button class="mascot-btn" id="mascotBtn" type="button" aria-label="Planguage mascot">
+          <img src="assets/mascot.svg" alt="" class="mascot" id="mascot" width="88" height="88" />
+        </button>
+        <div class="hero-text">
+          <h1>Planguage</h1>
+          <p class="tagline">Every consonant becomes <strong>P</strong>. Pop epappe!</p>
+        </div>
+      </header>
+
+      <section class="translator-card" aria-label="Planguage translator">
+        <div class="panel panel-input">
+          <label for="inputText">English</label>
+          <textarea
+            id="inputText"
+            rows="5"
+            placeholder="Type something… for example"
+            spellcheck="true"
+          ></textarea>
+          <p class="meta" id="charCount">0 characters</p>
+        </div>
+
+        <div class="panel panel-output">
+          <div class="panel-header">
+            <label for="outputText">Planguage</label>
+            <button class="btn-copy" id="copyBtn" type="button" aria-label="Copy translation">
+              Copy
+            </button>
+          </div>
+          <output id="outputText" class="output" for="inputText" aria-live="polite">
+            Your translation pops up here…
+          </output>
+          <p class="example-badge hidden" id="exampleBadge">Canonical example unlocked!</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span class="chip">Consonants → P · Natural P's stay special</span>
+        <a
+          class="chip chip-link"
+          href="https://github.com/bjsmithxyz/planguage"
+          id="repoLink"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub
+        </a>
+      </footer>
+    </main>
+
+    <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+    <div class="confetti-layer hidden" id="confettiLayer" aria-hidden="true"></div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

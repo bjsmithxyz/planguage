@@ -1,0 +1,386 @@
+:root {
+  --bg-1: #ff8a65;
+  --bg-2: #ffd54f;
+  --bg-3: #4dd0e1;
+  --ink: #1a1a2e;
+  --ink-soft: #4a4a68;
+  --card: rgba(255, 255, 255, 0.92);
+  --card-border: rgba(255, 255, 255, 0.65);
+  --accent: #ff6b6b;
+  --accent-2: #4ecdc4;
+  --shadow: 0 24px 60px rgba(26, 26, 46, 0.18);
+  --radius: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
+  overflow-x: hidden;
+}
+
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.35;
+  animation: float 12s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 280px;
+  height: 280px;
+  background: #fff;
+  top: -60px;
+  left: -40px;
+}
+
+.orb-2 {
+  width: 220px;
+  height: 220px;
+  background: #ffe082;
+  bottom: 10%;
+  right: -50px;
+  animation-delay: -4s;
+}
+
+.orb-3 {
+  width: 180px;
+  height: 180px;
+  background: #80deea;
+  top: 40%;
+  left: 55%;
+  animation-delay: -8s;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  width: min(960px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.mascot-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.mascot-btn:hover {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.mascot-btn:active {
+  transform: scale(0.96);
+}
+
+.mascot {
+  display: block;
+  animation: bounce 2.4s ease-in-out infinite;
+}
+
+.mascot.wink {
+  animation: wink 0.6s ease;
+}
+
+.hero-text h1 {
+  margin: 0;
+  font-family: "Fredoka", system-ui, sans-serif;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.translator-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  backdrop-filter: blur(12px);
+}
+
+.panel label {
+  display: block;
+  font-family: "Fredoka", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.panel-header label {
+  margin-bottom: 0;
+}
+
+textarea,
+.output {
+  width: 100%;
+  min-height: 180px;
+  border: 2px solid rgba(26, 26, 46, 0.08);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.75);
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.25);
+}
+
+.output {
+  display: block;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.output.updated {
+  animation: slideIn 0.25s ease;
+}
+
+.output.empty {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.meta {
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.btn-copy {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), #ff8787);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.35);
+}
+
+.btn-copy:hover {
+  transform: translateY(-1px);
+}
+
+.btn-copy:active {
+  transform: scale(0.96);
+}
+
+.example-badge {
+  margin: 0.75rem 0 0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(78, 205, 196, 0.2);
+  color: #0f766e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.chip-link {
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.chip-link:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%) translateY(12px);
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 20;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10%;
+  font-family: "Fredoka", system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  animation: confettiFall linear forwards;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) scale(1.05);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wink {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(0.12);
+  }
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .translator-card {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot,
+  .orb,
+  .output.updated,
+  .confetti-piece {
+    animation: none !important;
+  }
+
+  .mascot-btn:hover {
+    transform: none;
+  }
+}
