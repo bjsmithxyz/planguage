@@ -137,13 +137,7 @@ body {
 
 .panel-input,
 .panel-output {
-  transition: transform 0.3s ease, opacity 0.3s ease;
   min-width: 0;
-}
-
-.translator-card.is-swapping .panel-input,
-.translator-card.is-swapping .panel-output {
-  pointer-events: none;
 }
 
 .panel {

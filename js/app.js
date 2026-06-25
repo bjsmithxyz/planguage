@@ -13,9 +13,6 @@ const mascotBtn = document.getElementById("mascotBtn");
 const mascotEl = document.getElementById("mascot");
 const exampleBadgeEl = document.getElementById("exampleBadge");
 const confettiLayerEl = document.getElementById("confettiLayer");
-const translatorCardEl = document.querySelector(".translator-card");
-const inputPanelEl = document.querySelector(".panel-input");
-const outputPanelEl = document.querySelector(".panel-output");
 
 const EMPTY_HINT = "Your translation pops up here…";
 const DEBOUNCE_MS = 80;
@@ -91,15 +88,6 @@ function updateDirectionUI() {
   directionLabelEl.textContent = config.switchLabel;
   directionBtn.title = config.switchLabel;
   directionBtn.setAttribute("aria-label", config.switchAria);
-}
-
-function swapPanels() {
-  const swapped = translatorCardEl.classList.toggle("is-swapped");
-  if (swapped) {
-    translatorCardEl.insertBefore(outputPanelEl, inputPanelEl);
-  } else {
-    translatorCardEl.insertBefore(inputPanelEl, outputPanelEl);
-  }
 }
 
 function renderOutput(text) {
@@ -193,7 +181,6 @@ async function switchDirection() {
     directionBtn.disabled = false;
   }
 
-  swapPanels();
   updateDirectionUI();
 
   if (currentOutput) {
