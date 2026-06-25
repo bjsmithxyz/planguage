@@ -352,7 +352,7 @@ textarea:focus {
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 0.35rem;
   padding: 0.4rem 0.5rem;
   font-size: 0.7rem;
   color: var(--ink-soft);
