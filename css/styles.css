@@ -361,6 +361,34 @@ textarea:focus {
   display: none !important;
 }
 
+.site-credit {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.site-credit a {
+  display: flex;
+  color: var(--ink);
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+.site-credit a:hover {
+  opacity: 1;
+}
+
+.site-credit svg {
+  width: 18px;
+  height: 18px;
+}
+
 @keyframes bounce {
   0%,
   100% {

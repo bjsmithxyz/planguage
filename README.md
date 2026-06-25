@@ -2,7 +2,7 @@
 
 A bright, interactive web app that translates English into **Planguage** — where every consonant becomes `p`.
 
-Live demo: enable GitHub Pages on this repo (see below).
+Live app: **[bjsmithxyz.github.io/planguage](https://bjsmithxyz.github.io/planguage/)**
 
 ## Rules
 
