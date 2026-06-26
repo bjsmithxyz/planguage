@@ -1,4 +1,5 @@
 import { ensureReverseDictionary, translateFromPlanguage, translateToPlanguage } from "./planguage.js";
+import { initThemes } from "./themes.js";
 
 const inputEl = document.getElementById("inputText");
 const outputEl = document.getElementById("outputText");
@@ -13,11 +14,17 @@ const mascotBtn = document.getElementById("mascotBtn");
 const mascotEl = document.getElementById("mascot");
 const exampleBadgeEl = document.getElementById("exampleBadge");
 const confettiLayerEl = document.getElementById("confettiLayer");
+const themeBtn = document.getElementById("themeBtn");
+const themeMenu = document.getElementById("themeMenu");
 
 const EMPTY_HINT = "Your translation pops up here…";
 const DEBOUNCE_MS = 80;
 const PARTY_CLICKS = 7;
 const PARTY_DURATION_MS = 5000;
+const ANNIE_DURATION_MS = 3500;
+const MASCOT_DEFAULT = "assets/mascot.svg";
+const MASCOT_ANNIE = "assets/mascot-annie.svg";
+const ANNIE_PATTERN = /\bAnnie\b/i;
 
 const DIRECTION = {
   EN_TO_PL: "en-to-pl",
@@ -47,6 +54,8 @@ let toastTimer = null;
 let mascotClicks = 0;
 let partyActive = false;
 let plangedShown = false;
+let annieTimer = null;
+let annieActive = false;
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -90,6 +99,27 @@ function updateDirectionUI() {
   directionBtn.setAttribute("aria-label", config.switchAria);
 }
 
+function resetAnnieFace() {
+  annieActive = false;
+  mascotEl.src = MASCOT_DEFAULT;
+  mascotEl.classList.remove("annie");
+}
+
+function triggerAnnieFace() {
+  if (annieActive) {
+    window.clearTimeout(annieTimer);
+  }
+
+  annieActive = true;
+  mascotEl.classList.remove("wink");
+  mascotEl.src = MASCOT_ANNIE;
+  mascotEl.classList.add("annie");
+
+  annieTimer = window.setTimeout(() => {
+    resetAnnieFace();
+  }, ANNIE_DURATION_MS);
+}
+
 function renderOutput(text) {
   if (!text.trim()) {
     outputEl.textContent = EMPTY_HINT;
@@ -109,6 +139,13 @@ function checkEasterEggs(rawInput) {
   const trimmed = rawInput.trim();
   const normalized = trimmed.toLowerCase();
 
+  if (ANNIE_PATTERN.test(rawInput)) {
+    triggerAnnieFace();
+  } else if (annieActive) {
+    resetAnnieFace();
+    window.clearTimeout(annieTimer);
+  }
+
   if (direction === DIRECTION.EN_TO_PL && normalized === "planguage" && !plangedShown) {
     plangedShown = true;
     showToast("Planged!");
@@ -120,9 +157,11 @@ function checkEasterEggs(rawInput) {
 
   if (showExampleBadge) {
     exampleBadgeEl.classList.remove("hidden");
-    mascotEl.classList.remove("wink");
-    void mascotEl.offsetWidth;
-    mascotEl.classList.add("wink");
+    if (!annieActive) {
+      mascotEl.classList.remove("wink");
+      void mascotEl.offsetWidth;
+      mascotEl.classList.add("wink");
+    }
   } else {
     exampleBadgeEl.classList.add("hidden");
   }
@@ -234,6 +273,7 @@ mascotBtn.addEventListener("click", () => {
   }
 });
 
+initThemes(themeMenu, themeBtn);
 updateDirectionUI();
 updateCharCount("");
 renderOutput("");

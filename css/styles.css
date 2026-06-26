@@ -1,15 +1,113 @@
-:root {
-  --bg-1: #ff8a65;
-  --bg-2: #ffd54f;
-  --bg-3: #4dd0e1;
+:root,
+[data-theme="coral"] {
+  --bg-1: #ffb4a2;
+  --bg-2: #ffe082;
+  --bg-3: #80deea;
   --ink: #1a1a2e;
   --ink-soft: #4a4a68;
   --card: rgba(255, 255, 255, 0.92);
   --card-border: rgba(255, 255, 255, 0.65);
-  --accent: #ff6b6b;
-  --accent-2: #4ecdc4;
-  --shadow: 0 24px 60px rgba(26, 26, 46, 0.18);
+  --accent: #ff8a80;
+  --accent-2: #4dd0c8;
+  --accent-soft: #ffb4a2;
+  --shadow: 0 24px 60px rgba(26, 26, 46, 0.16);
   --radius: 24px;
+  --orb-1: #fff8f6;
+  --orb-2: #fff3c4;
+  --orb-3: #b2ebf2;
+  --focus-ring: rgba(77, 208, 200, 0.25);
+  --badge-bg: rgba(77, 208, 200, 0.22);
+  --badge-ink: #0f766e;
+}
+
+[data-theme="blossom"] {
+  --bg-1: #ffc8dd;
+  --bg-2: #ffafcc;
+  --bg-3: #cdb4db;
+  --accent: #ff85a2;
+  --accent-2: #b388eb;
+  --accent-soft: #ffb3c6;
+  --orb-1: #fff0f6;
+  --orb-2: #ffe5ec;
+  --orb-3: #e2cfea;
+  --focus-ring: rgba(179, 136, 235, 0.28);
+  --badge-bg: rgba(255, 133, 162, 0.22);
+  --badge-ink: #9d174d;
+}
+
+[data-theme="mint"] {
+  --bg-1: #b7f0db;
+  --bg-2: #a0e8cf;
+  --bg-3: #c7f0ff;
+  --accent: #5ec4a8;
+  --accent-2: #7ec8e3;
+  --accent-soft: #9be7c4;
+  --orb-1: #f0fff8;
+  --orb-2: #e8fff4;
+  --orb-3: #dff6ff;
+  --focus-ring: rgba(94, 196, 168, 0.28);
+  --badge-bg: rgba(94, 196, 168, 0.22);
+  --badge-ink: #0f766e;
+}
+
+[data-theme="lavender"] {
+  --bg-1: #d4c1ff;
+  --bg-2: #e2c9ff;
+  --bg-3: #ffd6e0;
+  --accent: #a98bff;
+  --accent-2: #ff9eb5;
+  --accent-soft: #c9b6ff;
+  --orb-1: #f7f2ff;
+  --orb-2: #f3e8ff;
+  --orb-3: #ffe8ef;
+  --focus-ring: rgba(169, 139, 255, 0.28);
+  --badge-bg: rgba(169, 139, 255, 0.22);
+  --badge-ink: #6b21a8;
+}
+
+[data-theme="peach"] {
+  --bg-1: #ffd6ba;
+  --bg-2: #ffe5b4;
+  --bg-3: #b8e8ff;
+  --accent: #ffab76;
+  --accent-2: #7ec8e3;
+  --accent-soft: #ffc9a8;
+  --orb-1: #fff7ef;
+  --orb-2: #fff4de;
+  --orb-3: #e3f4ff;
+  --focus-ring: rgba(255, 171, 118, 0.28);
+  --badge-bg: rgba(255, 171, 118, 0.22);
+  --badge-ink: #c2410c;
+}
+
+[data-theme="candy"] {
+  --bg-1: #ffc8e8;
+  --bg-2: #bde0fe;
+  --bg-3: #e2c6ff;
+  --accent: #ff8ec7;
+  --accent-2: #8ecae6;
+  --accent-soft: #ffb3da;
+  --orb-1: #fff0f8;
+  --orb-2: #eef6ff;
+  --orb-3: #f3e8ff;
+  --focus-ring: rgba(255, 142, 199, 0.28);
+  --badge-bg: rgba(142, 202, 230, 0.28);
+  --badge-ink: #be185d;
+}
+
+[data-theme="lemon"] {
+  --bg-1: #fff3a3;
+  --bg-2: #ffe66d;
+  --bg-3: #b8f2ff;
+  --accent: #ffd166;
+  --accent-2: #70d6ff;
+  --accent-soft: #ffe98a;
+  --orb-1: #fffceb;
+  --orb-2: #fff9db;
+  --orb-3: #e8fbff;
+  --focus-ring: rgba(112, 214, 255, 0.28);
+  --badge-bg: rgba(255, 209, 102, 0.28);
+  --badge-ink: #a16207;
 }
 
 *,
@@ -29,6 +127,109 @@ body {
   color: var(--ink);
   background: linear-gradient(135deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
   overflow-x: hidden;
+  transition: background 0.45s ease;
+}
+
+.theme-picker {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 25;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.theme-btn:hover {
+  transform: scale(1.06);
+}
+
+.theme-btn:active {
+  transform: scale(0.96);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 11rem;
+  padding: 0.45rem;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.theme-option:hover,
+.theme-option.is-active {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.theme-swatch {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(26, 26, 46, 0.08);
+}
+
+.theme-swatch-coral {
+  background: linear-gradient(135deg, #ffb4a2, #80deea);
+}
+
+.theme-swatch-blossom {
+  background: linear-gradient(135deg, #ffc8dd, #cdb4db);
+}
+
+.theme-swatch-mint {
+  background: linear-gradient(135deg, #b7f0db, #c7f0ff);
+}
+
+.theme-swatch-lavender {
+  background: linear-gradient(135deg, #d4c1ff, #ffd6e0);
+}
+
+.theme-swatch-peach {
+  background: linear-gradient(135deg, #ffd6ba, #b8e8ff);
+}
+
+.theme-swatch-candy {
+  background: linear-gradient(135deg, #ffc8e8, #bde0fe);
+}
+
+.theme-swatch-lemon {
+  background: linear-gradient(135deg, #fff3a3, #b8f2ff);
 }
 
 .bg-orbs {
@@ -50,7 +251,7 @@ body {
 .orb-1 {
   width: 280px;
   height: 280px;
-  background: #fff;
+  background: var(--orb-1);
   top: -60px;
   left: -40px;
 }
@@ -58,7 +259,7 @@ body {
 .orb-2 {
   width: 220px;
   height: 220px;
-  background: #ffe082;
+  background: var(--orb-2);
   bottom: 10%;
   right: -50px;
   animation-delay: -4s;
@@ -67,7 +268,7 @@ body {
 .orb-3 {
   width: 180px;
   height: 180px;
-  background: #80deea;
+  background: var(--orb-3);
   top: 40%;
   left: 55%;
   animation-delay: -8s;
@@ -112,6 +313,10 @@ body {
 
 .mascot.wink {
   animation: wink 0.6s ease;
+}
+
+.mascot.annie {
+  animation: bounce 0.8s ease-in-out infinite;
 }
 
 .hero-text h1 {
@@ -209,7 +414,7 @@ textarea,
 textarea:focus {
   outline: none;
   border-color: var(--accent-2);
-  box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.25);
+  box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
 .output {
@@ -242,10 +447,10 @@ textarea:focus {
   font-size: 0.85rem;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), #ff8787);
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.35);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 35%, transparent);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -267,8 +472,8 @@ textarea:focus {
   margin: 0;
   padding: 0.45rem 0.75rem;
   border-radius: 999px;
-  background: rgba(78, 205, 196, 0.2);
-  color: #0f766e;
+  background: var(--badge-bg);
+  color: var(--badge-ink);
   font-size: 0.85rem;
   font-weight: 600;
   display: inline-block;
