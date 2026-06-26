@@ -9,6 +9,30 @@ function isConsonant(char) {
   return isLetter(char) && !VOWELS.has(char.toLowerCase());
 }
 
+function isUppercaseLetter(char) {
+  return isLetter(char) && char === char.toUpperCase();
+}
+
+/** @returns {Set<number>} */
+function getSentenceStarts(text) {
+  const starts = new Set([0]);
+
+  for (let i = 1; i < text.length; i += 1) {
+    const prev = text[i - 1];
+    if (prev === "." || prev === "!" || prev === "?") {
+      let j = i;
+      while (j < text.length && text[j] === " ") {
+        j += 1;
+      }
+      if (j < text.length) {
+        starts.add(j);
+      }
+    }
+  }
+
+  return starts;
+}
+
 /**
  * @typedef {{ char: string, natural: boolean, replacement: boolean, upper: boolean }} Token
  */
@@ -16,8 +40,12 @@ function isConsonant(char) {
 /** @returns {Token[]} */
 function tokenize(text) {
   const tokens = [];
+  const sentenceStarts = getSentenceStarts(text);
 
-  for (const char of text) {
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+    const atSentenceStart = sentenceStarts.has(i);
+
     if (char.toLowerCase() === "p" && isLetter(char)) {
       tokens.push({
         char: "p",
@@ -29,7 +57,12 @@ function tokenize(text) {
     }
 
     if (isConsonant(char)) {
-      tokens.push({ char: "p", natural: false, replacement: true, upper: false });
+      tokens.push({
+        char: "p",
+        natural: false,
+        replacement: true,
+        upper: atSentenceStart && isUppercaseLetter(char),
+      });
       continue;
     }
 
@@ -54,6 +87,7 @@ function collapseRuns(tokens) {
     }
 
     let hasReplacement = false;
+    let replacementUpper = false;
     /** @type {boolean[]} */
     const naturalCases = [];
     let runEnd = index;
@@ -64,6 +98,9 @@ function collapseRuns(tokens) {
       }
       if (tokens[runEnd].replacement) {
         hasReplacement = true;
+        if (tokens[runEnd].upper) {
+          replacementUpper = true;
+        }
       }
       runEnd += 1;
     }
@@ -72,7 +109,7 @@ function collapseRuns(tokens) {
       result.push(upper ? "P" : "p");
     }
     if (hasReplacement) {
-      result.push("p");
+      result.push(replacementUpper ? "P" : "p");
     }
 
     index = runEnd;

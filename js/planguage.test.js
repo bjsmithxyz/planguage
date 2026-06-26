@@ -7,7 +7,7 @@ const cases = [
   ["", ""],
   ["hello", "pepo"],
   ["123!", "123!"],
-  ["Hi there!", "pi pepe!"],
+  ["Hi there!", "Pi pepe!"],
   ["ppp", "ppp"],
   ["paper", "papep"],
   ["happy", "pappp"],
@@ -15,6 +15,8 @@ const cases = [
   ["PPP", "PPP"],
   ["Pop", "Pop"],
   ["POP", "POP"],
+  ["Hello", "Pepo"],
+  ["Hello. World", "Pepo. Pop"],
 ];
 
 const reverseCases = [
