@@ -36,15 +36,15 @@ const UI = {
     inputLabel: "English",
     outputLabel: "Planguage",
     inputPlaceholder: "Type something… for example",
-    switchLabel: "Planguage → English",
-    switchAria: "Switch to Planguage to English",
+    switchLabel: "English → Planguage",
+    switchAria: "Currently translating English to Planguage",
   },
   [DIRECTION.PL_TO_EN]: {
     inputLabel: "Planguage",
     outputLabel: "English",
     inputPlaceholder: "Type something… pop epappe",
-    switchLabel: "English → Planguage",
-    switchAria: "Switch to English to Planguage",
+    switchLabel: "Planguage → English",
+    switchAria: "Currently translating Planguage to English",
   },
 };
 
