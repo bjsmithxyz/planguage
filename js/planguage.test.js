@@ -11,6 +11,10 @@ const cases = [
   ["ppp", "ppp"],
   ["paper", "papep"],
   ["happy", "pappp"],
+  ["Paper", "Papep"],
+  ["PPP", "PPP"],
+  ["Pop", "Pop"],
+  ["POP", "POP"],
 ];
 
 const reverseCases = [

@@ -10,7 +10,7 @@ function isConsonant(char) {
 }
 
 /**
- * @typedef {{ char: string, natural: boolean, replacement: boolean }} Token
+ * @typedef {{ char: string, natural: boolean, replacement: boolean, upper: boolean }} Token
  */
 
 /** @returns {Token[]} */
@@ -19,16 +19,21 @@ function tokenize(text) {
 
   for (const char of text) {
     if (char.toLowerCase() === "p" && isLetter(char)) {
-      tokens.push({ char: "p", natural: true, replacement: false });
+      tokens.push({
+        char: "p",
+        natural: true,
+        replacement: false,
+        upper: char === "P",
+      });
       continue;
     }
 
     if (isConsonant(char)) {
-      tokens.push({ char: "p", natural: false, replacement: true });
+      tokens.push({ char: "p", natural: false, replacement: true, upper: false });
       continue;
     }
 
-    tokens.push({ char, natural: false, replacement: false });
+    tokens.push({ char, natural: false, replacement: false, upper: false });
   }
 
   return tokens;
@@ -48,13 +53,14 @@ function collapseRuns(tokens) {
       continue;
     }
 
-    let naturalCount = 0;
     let hasReplacement = false;
+    /** @type {boolean[]} */
+    const naturalCases = [];
     let runEnd = index;
 
     while (runEnd < tokens.length && tokens[runEnd].char === "p") {
       if (tokens[runEnd].natural) {
-        naturalCount += 1;
+        naturalCases.push(tokens[runEnd].upper);
       }
       if (tokens[runEnd].replacement) {
         hasReplacement = true;
@@ -62,8 +68,10 @@ function collapseRuns(tokens) {
       runEnd += 1;
     }
 
-    const collapsedCount = naturalCount + (hasReplacement ? 1 : 0);
-    for (let i = 0; i < collapsedCount; i += 1) {
+    for (const upper of naturalCases) {
+      result.push(upper ? "P" : "p");
+    }
+    if (hasReplacement) {
       result.push("p");
     }
 
